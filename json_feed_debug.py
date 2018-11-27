@@ -26,9 +26,9 @@ class JSONFeed(object):
             'title': {'key': 'title'},
             'content': {'key': 'content_html'},
             'description': {'key': 'description', 'tr': Markup.striptags},
-            'pubdate': {'key': 'date_published', 'date': datetime.isoformat},
-            'updateddate': {'key': 'date_modified', 'date': datetime.isoformat},
-            'tags': {'key': 'tags', 'tr': lambda c: [str(t) for t in c]},
+            'pubdate': {'key': 'date_published', 'str': datetime.isoformat},
+            'updateddate': {'key': 'date_modified', 'str': datetime.isoformat},
+            'categories': {'key': 'tags', 'tr': lambda c: [str(t) for t in c]},
             'author': {'key': 'author', 'tr': lambda n: {'name': str(n)}}}
 
     def __init__(self, title, **kwargs):
@@ -47,17 +47,13 @@ class JSONFeed(object):
                 if 'tr' in json_feed_spec:
                     print("Found translated string")
                     markedup_value = Markup(value)
+
                     value = json_feed_spec['tr'](markedup_value)
-                elif 'date' in json_feed_spec:
-                    print("Found date")
-                    if value.tzinfo:
-                        print("tzinfo!")
-                    else:
-                        print("none-tzinfo")
             except Exception as e:
                 print("Exception value: ", value)
                 raise e
             dict_[json_feed_spec['key']] = value
+        print("Finished enriching dictionary")
 
     def add_item(self, unique_id, **kwargs):
         item = {'id': unique_id}
@@ -65,12 +61,8 @@ class JSONFeed(object):
         self.feed['items'].append(item)
 
     def write(self, fp, encoding='utf-8'):
-        try:
-            json.dump(self.feed, fp, encoding)
-        except Exception as e:
-            #print("/n/nfp is type: ", type(fp))
-            #print("self.feed", self.feed)
-            raise e
+        print("Writing json")
+        json.dump(self.feed, fp, encoding)
 
 
 class JSONFeedGenerator(generators.ArticlesGenerator):
