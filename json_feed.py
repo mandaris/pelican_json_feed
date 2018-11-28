@@ -50,10 +50,15 @@ class JSONFeed(object):
                     value = json_feed_spec['tr'](markedup_value)
                 elif 'date' in json_feed_spec:
                     print("Found date")
+                    date = value
                     if value.tzinfo:
                         print("tzinfo!")
+                        tz = date.strftime('%z')
+                        tz = tz[:-2] + ':' + tz[-2:]
                     else:
                         print("none-tzinfo")
+                        tz = "-00:00"
+                    value = date.strftime("%Y-%m-%dT%H:%M:%S") + tz
             except Exception as e:
                 print("Exception value: ", value)
                 raise e
