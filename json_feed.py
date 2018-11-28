@@ -24,13 +24,16 @@ class JSONFeed(object):
             'favicon': {'key': 'favicon'},
             'icon': {'key': 'icon'},
             'author': {'key': 'author', 'tr': lambda n: {'name': str(n)}}}
-    ITEMS_TRANS = {'link': {'key': 'url'},
+    ITEMS_TRANS = {
+            'url': {'key': 'url'},
+            'id': {'key': 'id'},
+            'link': {'key': 'link'},
             'title': {'key': 'title'},
             'content': {'key': 'content_html'},
-            'description': {'key': 'description', 'tr': Markup.striptags},
+            #'description': {'key': 'description', 'tr': Markup.striptags},
             'pubdate': {'key': 'date_published', 'date': datetime.isoformat},
             'updateddate': {'key': 'date_modified', 'date': datetime.isoformat},
-            'tags': {'key': 'tags', 'tr': lambda c: [str(t) for t in c]},
+            'tags': {'key': 'category', 'tr': lambda c: [str(t) for t in c]},
             'author': {'key': 'author', 'tr': lambda n: {'name': str(n)}}}
 
     def __init__(self, title, **kwargs):
@@ -69,6 +72,7 @@ class JSONFeed(object):
 
     def add_item(self, unique_id, **kwargs):
         item = {'id': unique_id}
+        print("unique_id: ", unique_id)
         self._enrich_dict(item, self.ITEMS_TRANS, kwargs)
         self.feed['items'].append(item)
 
