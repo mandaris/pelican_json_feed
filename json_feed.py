@@ -9,11 +9,13 @@ A Pelican plugin to generate a JSON Feed file
 from __future__ import unicode_literals
 
 import json
+import logging
 from datetime import datetime
 from jinja2 import Markup
 from operator import attrgetter
 from pelican import signals, generators, writers
 
+logger = logging.getLogger(__name__)
 
 class JSONFeed(object):
     TOP_LEVEL_TRANS = {'link': {'key': 'home_page_url'},
@@ -37,30 +39,31 @@ class JSONFeed(object):
         self._enrich_dict(self.feed, self.TOP_LEVEL_TRANS, kwargs)
 
     def _enrich_dict(self, dict_, translations, kwargs):
+        logger.debug("Beginning _enrich_dict")
         for local_key, json_feed_spec in translations.items():
             if not kwargs.get(local_key):
                 continue
-            print("dictionary key: ", local_key)
-            print("dictionary value: ", kwargs[local_key])
+            logger.debug("dictionary key: %s" % local_key)
+            logger.debug("dictionary value: %s" % kwargs[local_key])
             value = kwargs[local_key]
             try:
                 if 'tr' in json_feed_spec:
-                    print("Found translated string")
+                    #print("Found translated string")
                     markedup_value = Markup(value)
                     value = json_feed_spec['tr'](markedup_value)
                 elif 'date' in json_feed_spec:
-                    print("Found date")
+                    #print("Found date")
                     date = value
                     if value.tzinfo:
-                        print("tzinfo!")
+                        #print("tzinfo!")
                         tz = date.strftime('%z')
                         tz = tz[:-2] + ':' + tz[-2:]
                     else:
-                        print("none-tzinfo")
+                        #print("none-tzinfo")
                         tz = "-00:00"
                     value = date.strftime("%Y-%m-%dT%H:%M:%S") + tz
             except Exception as e:
-                print("Exception value: ", value)
+                logger.error("Exception value: %s" % value)
                 raise e
             dict_[json_feed_spec['key']] = value
 
