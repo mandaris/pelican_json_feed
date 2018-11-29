@@ -157,7 +157,7 @@ class JSONFeedWriter(writers.Writer, object):
                         author=context.get('AUTHOR'),
                         favicon=context.get('FAVICON'),
                         icon=context.get('SITELOGO'),
-                        description=context.get('SITESUBTITLE', ''))
+                        description=context.get('SITE_DESCRIPTION', ''))
         return feed
 
 
