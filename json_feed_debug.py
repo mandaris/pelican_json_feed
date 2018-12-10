@@ -28,7 +28,7 @@ class JSONFeed(object):
             'description': {'key': 'description', 'tr': Markup.striptags},
             'pubdate': {'key': 'date_published', 'str': datetime.isoformat},
             'updateddate': {'key': 'date_modified', 'str': datetime.isoformat},
-            'categories': {'key': 'tags', 'tr': lambda c: [str(t) for t in c]},
+            'tags': {'key': 'tags', 'tr': lambda c: [str(t) for t in c]},
             'author': {'key': 'author', 'tr': lambda n: {'name': str(n)}}}
 
     def __init__(self, title, **kwargs):

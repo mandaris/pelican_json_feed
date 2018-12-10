@@ -24,9 +24,10 @@ class JSONFeed(object):
             'description': {'key': 'description', 'tr': Markup.striptags},
             'favicon': {'key': 'favicon'},
             'icon': {'key': 'icon'},
-            'author': {'key': 'author', 'tr': lambda n: {'name': str(n)}}}
+            'author': {'key': 'author'}, 'tr': lambda n: {'name': str(n)}}
     ITEMS_TRANS = {
             #'url': {'key': 'link'},
+            'id': {'key': 'id'},
             'url': {'key': 'id'},
             'link': {'key': 'url'},
             'title': {'key': 'title'},
@@ -44,22 +45,29 @@ class JSONFeed(object):
 
     def _enrich_dict(self, dict_, translations, kwargs):
         logger.debug("Beginning _enrich_dict")
-        logger.debug("Printing translations")
         pp = pprint.PrettyPrinter(indent=4)
-        pp.pprint(translations)
-        logger.debug("Printing kwargs")
-        pp.pprint(kwargs)
-        logger.debug("printing dict_")
-        pp.pprint(dict_)
+        #logger.debug("Printing translations: \n\n%s", pprint.saferepr(translations))
+        
+        #pp.pprint(translations)
+        #logger.debug("Printing kwargs: \n\n%s", pprint.saferepr(kwargs))
+        #pp.pprint(kwargs)
+        #logger.debug("printing dict_: \n\n%s", pprint.saferepr(dict_))
+        #pp.pprint(dict_)
+
+        logger.debug("Begining dictionary building.\n\n")
         for local_key, json_feed_spec in translations.items():
-            logger.debug("dictionary key: %s" % local_key)
+            logger.debug("local_key:      %s" % local_key)
+            logger.debug("json_feed_spec: %s" % json_feed_spec)
+
             if not kwargs.get(local_key):
-                logger.debug("No values in kwargs")
+                logger.debug("!! No values in kwargs for local_key(%s). Moving to next value. !!", local_key)
                 continue
-            logger.debug("dictionary key: %s" % local_key)
-            logger.debug('dictionary key_type: %s' % type(local_key))
-            logger.debug("dictionary value: %s" % kwargs[local_key])
-            print local_key
+            
+            #logger.debug("dictionary key: %s" % local_key)
+            #logger.debug('dictionary key_type: %s' % type(local_key))
+            #logger.debug("dictionary value: %s" % kwargs[local_key])
+            #print local_key
+            
             value = kwargs[local_key]
 
             try:
@@ -81,12 +89,15 @@ class JSONFeed(object):
             except Exception as e:
                 logger.error("Exception value: %s" % value)
                 raise e
+            print(json_feed_spec['key'])
             dict_[json_feed_spec['key']] = value
 
     def add_item(self, unique_id, **kwargs):
         item = {'id': unique_id}
         #print("unique_id: ", unique_id)
         self._enrich_dict(item, self.ITEMS_TRANS, kwargs)
+        pp = pprint.PrettyPrinter(indent=4)
+        logger.debug("Enriched dictionary from add_item: \n%s", pprint.saferepr(item))
         self.feed['items'].append(item)
 
     def write(self, fp, encoding='utf-8'):
