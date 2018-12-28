@@ -27,7 +27,7 @@ class JSONFeed(object):
             'author': {'key': 'author'}, 'tr': lambda n: {'name': str(n)}}
     ITEMS_TRANS = {
             #'url': {'key': 'link'},
-            'id': {'key': 'id'},
+            'id': {'key': 'url'},
             'url': {'key': 'id'},
             'link': {'key': 'url'},
             'title': {'key': 'title'},
@@ -35,10 +35,13 @@ class JSONFeed(object):
             #'description': {'key': 'description', 'tr': Markup.striptags},
             'pubdate': {'key': 'date_published', 'date': datetime.isoformat},
             'updateddate': {'key': 'date_modified', 'date': datetime.isoformat},
-            'category': {'key': 'tags', 'tr': lambda c: [str(t) for t in c]},
+            'tags': {'key': 'tags', 'tr': lambda c: [str(t) for t in c]},
             'author': {'key': 'author', 'tr': lambda n: {'name': str(n)}}}
 
     def __init__(self, title, **kwargs):
+        logger.debug("Initializing json feed.")
+        pp = pprint.PrettyPrinter(indent=4)
+        logger.debug("kwargs: %s", pprint.saferepr(kwargs))
         self.feed = {"version": "https://jsonfeed.org/version/1",
                      "title": title, 'items': []}
         self._enrich_dict(self.feed, self.TOP_LEVEL_TRANS, kwargs)
@@ -49,9 +52,9 @@ class JSONFeed(object):
         #logger.debug("Printing translations: \n\n%s", pprint.saferepr(translations))
         
         #pp.pprint(translations)
-        #logger.debug("Printing kwargs: \n\n%s", pprint.saferepr(kwargs))
+        logger.debug("passed kwargs: \n\n%s", pprint.pprint(kwargs, indent=4))
         #pp.pprint(kwargs)
-        #logger.debug("printing dict_: \n\n%s", pprint.saferepr(dict_))
+        logger.debug("printing dict_: \n\n%s", pprint.saferepr(dict_))
         #pp.pprint(dict_)
 
         logger.debug("Begining dictionary building.\n\n")
@@ -102,10 +105,9 @@ class JSONFeed(object):
 
     def write(self, fp, encoding='utf-8'):
         try:
-            json.dump(self.feed, fp, encoding)
+            json.dump(self.feed, fp, encoding, indent=4)
         except Exception as e:
-            #print("/n/nfp is type: ", type(fp))
-            #print("self.feed", self.feed)
+            logger.error("Error writing dictionary to filepath.")
             raise e
 
 
