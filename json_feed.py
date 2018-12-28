@@ -89,7 +89,7 @@ class JSONFeed(object):
             except Exception as e:
                 logger.error("Exception value: %s" % value)
                 raise e
-            print(json_feed_spec['key'])
+            #print("json_feed_spec['key']: %s" % json_feed_spec['key'])
             dict_[json_feed_spec['key']] = value
 
     def add_item(self, unique_id, **kwargs):
