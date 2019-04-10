@@ -18,6 +18,7 @@ import pprint
 
 logger = logging.getLogger(__name__)
 
+
 class JSONFeed(object):
     TOP_LEVEL_TRANS = {'link': {'key': 'home_page_url'},
             'feed_url': {'key': 'feed_url'},
@@ -26,13 +27,13 @@ class JSONFeed(object):
             'icon': {'key': 'icon'},
             'author': {'key': 'author'}, 'tr': lambda n: {'name': str(n)}}
     ITEMS_TRANS = {
-            #'url': {'key': 'link'},
+            # 'url': {'key': 'link'},
             'id': {'key': 'url'},
             'url': {'key': 'id'},
             'link': {'key': 'url'},
             'title': {'key': 'title'},
             'content': {'key': 'content_html'},
-            #'description': {'key': 'description', 'tr': Markup.striptags},
+            # 'description': {'key': 'description', 'tr': Markup.striptags},
             'pubdate': {'key': 'date_published', 'date': datetime.isoformat},
             'updateddate': {'key': 'date_modified', 'date': datetime.isoformat},
             'tags': {'key': 'tags', 'tr': lambda c: [str(t) for t in c]},
@@ -48,9 +49,10 @@ class JSONFeed(object):
 
     def _enrich_dict(self, dict_, translations, kwargs):
         logger.debug("Beginning _enrich_dict")
-        pp = pprint.PrettyPrinter(indent=4)
-        #logger.debug("Printing translations: \n\n%s", pprint.saferepr(translations))
-        
+        # pp = pprint.PrettyPrinter(indent=4)
+        #logger.debug("Printing translations: \n\n%s",
+        #pprint.saferepr(translations))
+
         #pp.pprint(translations)
         logger.debug("passed kwargs: \n\n%s", pprint.pprint(kwargs, indent=4))
         #pp.pprint(kwargs)
@@ -65,12 +67,12 @@ class JSONFeed(object):
             if not kwargs.get(local_key):
                 logger.debug("!! No values in kwargs for local_key(%s). Moving to next value. !!", local_key)
                 continue
-            
+
             #logger.debug("dictionary key: %s" % local_key)
             #logger.debug('dictionary key_type: %s' % type(local_key))
             #logger.debug("dictionary value: %s" % kwargs[local_key])
             #print local_key
-            
+
             value = kwargs[local_key]
 
             try:
@@ -99,7 +101,7 @@ class JSONFeed(object):
         item = {'id': unique_id}
         #print("unique_id: ", unique_id)
         self._enrich_dict(item, self.ITEMS_TRANS, kwargs)
-        pp = pprint.PrettyPrinter(indent=4)
+        #pp = pprint.PrettyPrinter(indent=4)
         logger.debug("Enriched dictionary from add_item: \n%s", pprint.saferepr(item))
         self.feed['items'].append(item)
 
