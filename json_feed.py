@@ -20,7 +20,8 @@ logger = logging.getLogger(__name__)
 
 
 class JSONFeed(object):
-    TOP_LEVEL_TRANS = {'link': {'key': 'home_page_url'},
+    TOP_LEVEL_TRANS = {
+            'link': {'key': 'home_page_url'},
             'feed_url': {'key': 'feed_url'},
             'description': {'key': 'description', 'tr': Markup.striptags},
             'favicon': {'key': 'favicon'},
@@ -46,6 +47,7 @@ class JSONFeed(object):
         self.feed = {"version": "https://jsonfeed.org/version/1",
                      "title": title, 'items': []}
         self._enrich_dict(self.feed, self.TOP_LEVEL_TRANS, kwargs)
+        logger.debug("Initializing complete.")
 
     def _enrich_dict(self, dict_, translations, kwargs):
         logger.debug("Beginning _enrich_dict")
