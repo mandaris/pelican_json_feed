@@ -82,16 +82,13 @@ class JSONFeed(object):
                     markedup_value = Markup(value)
                     value = json_feed_spec['tr'](markedup_value)
                 elif 'date' in json_feed_spec:
-                    #print("Found date")
                     date = value
                     if value.tzinfo:
-                        #print("tzinfo!")
-                        tz = date.strftime('%z')
-                        tz = tz[:-2] + ':' + tz[-2:]
+                        time_zone = date.strftime('%z')
+                        time_zone = time_zone[:-2] + ':' + time_zone[-2:]
                     else:
-                        #print("none-tzinfo")
-                        tz = "-00:00"
-                    value = date.strftime("%Y-%m-%dT%H:%M:%S") + tz
+                        time_zone = "-00:00"
+                    value = date.strftime("%Y-%m-%dT%H:%M:%S") + time_zone
             except Exception as e:
                 logger.error("Exception value: %s" % value)
                 raise e
@@ -99,10 +96,10 @@ class JSONFeed(object):
             dict_[json_feed_spec['key']] = value
 
     def add_item(self, unique_id, **kwargs):
-        item = {'id': unique_id}
-        #print("unique_id: ", unique_id)
+        # item = {'id': unique_id}
+        # print("unique_id: ", unique_id)
         self._enrich_dict(item, self.ITEMS_TRANS, kwargs)
-        #pp = pprint.PrettyPrinter(indent=4)
+        # pp = pprint.PrettyPrinter(indent=4)
         logger.debug("Enriched dictionary from add_item: \n%s", pprint.saferepr(item))
         self.feed['items'].append(item)
 
