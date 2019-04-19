@@ -15,6 +15,7 @@ from jinja2 import Markup
 from operator import attrgetter
 from pelican import signals, generators, writers
 import pprint
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -78,8 +79,9 @@ class JSONFeed(object):
 
             try:
                 if 'tr' in json_feed_spec:
-                    #print("Found translated string")
+                    # print("Found translated string")
                     markedup_value = Markup(value)
+                    logger.debug("'tr' markedup_value %s", markedup_value)
                     value = json_feed_spec['tr'](markedup_value)
                 elif 'date' in json_feed_spec:
                     date = value
@@ -92,12 +94,12 @@ class JSONFeed(object):
             except Exception as e:
                 logger.error("Exception value: %s" % value)
                 raise e
-            #print("json_feed_spec['key']: %s" % json_feed_spec['key'])
+            # print("json_feed_spec['key']: %s" % json_feed_spec['key'])
             dict_[json_feed_spec['key']] = value
 
     def add_item(self, unique_id, **kwargs):
-        # item = {'id': unique_id}
-        # print("unique_id: ", unique_id)
+        item = {'id': unique_id}
+        print("unique_id: ", unique_id)
         self._enrich_dict(item, self.ITEMS_TRANS, kwargs)
         # pp = pprint.PrettyPrinter(indent=4)
         logger.debug("Enriched dictionary from add_item: \n%s", pprint.saferepr(item))
