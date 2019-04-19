@@ -49,23 +49,16 @@ class JSONFeed(object):
         self._enrich_dict(self.feed, self.TOP_LEVEL_TRANS, kwargs)
         logger.debug("Initializing complete.")
 
-
     def _enrich_dict(self, dict_, translations, kwargs):
         logger.debug("Beginning _enrich_dict")
-        # pp = pprint.PrettyPrinter(indent=4)
-        #logger.debug("Printing translations: \n\n%s",
-        #pprint.saferepr(translations))
+        pp = pprint.PrettyPrinter(indent=4)
+        # logger.debug("Printing translations: \n\n%s", pprint.saferepr(translations))
 
+        logger.debug("_enrich_dict was passed dict_: \n\n%s", pp.pformat(dict_))
 
-        logger.debug("_enrich_dict was passed dict_: \n\n%s", pprint.saferepr(dict_))
-        #pp.pprint(dict_)
+        logger.debug("_enrich_dict was passed translations: \n\n%s", pp.pformat(translations))
 
-        logger.debug("_enrich_dict was passed translations: \n\n%s", pprint.saferepr(translations))
-        #pp.pprint(translations)
-
-        logger.debug("_enrich_dict was passed kwargs: \n\n%s", pprint.pprint(kwargs, indent=4))
-        #pp.pprint(kwargs)
-
+        logger.debug("_enrich_dict was passed kwargs: \n\n%s", pp.pformat(kwargs))
 
         logger.debug("Begining dictionary building.\n\n")
         for local_key, json_feed_spec in translations.items():
@@ -76,10 +69,10 @@ class JSONFeed(object):
                 logger.debug("!! No values in kwargs for local_key(%s). Moving to next value. !!", local_key)
                 continue
 
-            #logger.debug("dictionary key: %s" % local_key)
-            #logger.debug('dictionary key_type: %s' % type(local_key))
-            #logger.debug("dictionary value: %s" % kwargs[local_key])
-            #print local_key
+            # logger.debug("dictionary key: %s" % local_key)
+            # logger.debug('dictionary key_type: %s' % type(local_key))
+            # logger.debug("dictionary value: %s" % kwargs[local_key])
+            # print local_key
 
             value = kwargs[local_key]
 
