@@ -1,1 +1,5 @@
 *.pyc
+
+/pelican_json.sublime-project
+
+/pelican_json.sublime-workspace
