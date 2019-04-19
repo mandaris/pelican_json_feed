@@ -49,17 +49,23 @@ class JSONFeed(object):
         self._enrich_dict(self.feed, self.TOP_LEVEL_TRANS, kwargs)
         logger.debug("Initializing complete.")
 
+
     def _enrich_dict(self, dict_, translations, kwargs):
         logger.debug("Beginning _enrich_dict")
         # pp = pprint.PrettyPrinter(indent=4)
         #logger.debug("Printing translations: \n\n%s",
         #pprint.saferepr(translations))
 
-        #pp.pprint(translations)
-        logger.debug("passed kwargs: \n\n%s", pprint.pprint(kwargs, indent=4))
-        #pp.pprint(kwargs)
-        logger.debug("printing dict_: \n\n%s", pprint.saferepr(dict_))
+
+        logger.debug("_enrich_dict was passed dict_: \n\n%s", pprint.saferepr(dict_))
         #pp.pprint(dict_)
+
+        logger.debug("_enrich_dict was passed translations: \n\n%s", pprint.saferepr(translations))
+        #pp.pprint(translations)
+
+        logger.debug("_enrich_dict was passed kwargs: \n\n%s", pprint.pprint(kwargs, indent=4))
+        #pp.pprint(kwargs)
+
 
         logger.debug("Begining dictionary building.\n\n")
         for local_key, json_feed_spec in translations.items():
