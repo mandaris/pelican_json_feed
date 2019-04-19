@@ -41,8 +41,8 @@ class JSONFeed(object):
 
     def __init__(self, title, **kwargs):
         logger.debug("Initializing json feed.")
-        pp = pprint.PrettyPrinter(indent=4)
-        logger.debug("kwargs: %s", pprint.saferepr(kwargs))
+        logger.debug("Title of feed: %s", title)
+        logger.debug("Arguments (**kwargs): %s", pprint.saferepr(kwargs))
         self.feed = {"version": "https://jsonfeed.org/version/1",
                      "title": title, 'items': []}
         self._enrich_dict(self.feed, self.TOP_LEVEL_TRANS, kwargs)
