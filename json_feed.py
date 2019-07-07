@@ -27,7 +27,8 @@ class JSONFeed(object):
             'description': {'key': 'description', 'tr': Markup.striptags},
             'favicon': {'key': 'favicon'},
             'icon': {'key': 'icon'},
-            'author': {'key': 'author'}, 'tr': lambda n: {'name': str(n)}}
+            'author': {'key': 'author'},
+            }
     ITEMS_TRANS = {
             # 'url': {'key': 'link'},
             'id': {'key': 'url'},
@@ -35,7 +36,8 @@ class JSONFeed(object):
             'link': {'key': 'url'},
             'title': {'key': 'title'},
             'content': {'key': 'content_html'},
-            # 'description': {'key': 'description', 'tr': Markup.striptags},
+            # 'description': {'key': 'description',
+            # 'tr': Markup.striptags},
             'pubdate': {'key': 'date_published', 'date': datetime.isoformat},
             'updateddate': {'key': 'date_modified', 'date': datetime.isoformat},
             'tags': {'key': 'tags', 'tr': lambda c: [str(t) for t in c]},
@@ -62,6 +64,7 @@ class JSONFeed(object):
         logger.debug("_enrich_dict was passed kwargs: \n\n%s", pp.pformat(kwargs))
 
         logger.debug("Begining dictionary building.\n\n")
+
         for local_key, json_feed_spec in translations.items():
             logger.debug("local_key:      %s" % local_key)
             logger.debug("json_feed_spec: %s" % json_feed_spec)
@@ -95,11 +98,12 @@ class JSONFeed(object):
                 logger.error("Exception value: %s" % value)
                 raise e
             # print("json_feed_spec['key']: %s" % json_feed_spec['key'])
+
             dict_[json_feed_spec['key']] = value
 
     def add_item(self, unique_id, **kwargs):
         item = {'id': unique_id}
-        print("unique_id: ", unique_id)
+        # print("unique_id: ", unique_id)
         self._enrich_dict(item, self.ITEMS_TRANS, kwargs)
         # pp = pprint.PrettyPrinter(indent=4)
         logger.debug("Enriched dictionary from add_item: \n%s", pprint.saferepr(item))
