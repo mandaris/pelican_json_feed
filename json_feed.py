@@ -47,10 +47,13 @@ class JSONFeed(object):
         logger.debug("Initializing json feed.")
         logger.debug("Title of feed: %s", title)
         logger.debug("Arguments (**kwargs): %s", pprint.saferepr(kwargs))
-        self.feed = {"version": "https://jsonfeed.org/version/1",
-                     "title": title, 'items': []}
+        self.feed = {
+            "version": "https://jsonfeed.org/version/1",
+            "title": title,
+            "items": []  # Emptry array of blog posts
+        }
         self._enrich_dict(self.feed, self.TOP_LEVEL_TRANS, kwargs)
-        logger.debug("Initializing complete.")
+        logger.debug("Initializing json feed complete.")
 
     def _enrich_dict(self, dict_, translations, kwargs):
         logger.debug("Beginning _enrich_dict")
